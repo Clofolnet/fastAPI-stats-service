@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:12.14-alpine
+    container_name: statsservice-db
+    env_file:
+      - ./app/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+
+  web:
+    build: .
+    container_name: statsservice-web
+    env_file:
+      - ./app/.env
+    ports:
+      - "8004:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
